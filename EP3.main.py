@@ -33,7 +33,7 @@ class PlatV(pygame.sprite.Sprite):
         self.image=verde
         self.image=pygame.transform.scale(verde, (120,50))
         self.rect=self.image.get_rect()
-        self.rect.centerx=WIDTH/2
+        self.rect.centerx=random.randint(60,WIDTH-60)
         self.rect.bottom=-10
         self.width = WIDTH/5
         self.height = 50
@@ -48,22 +48,25 @@ class PlatB(pygame.sprite.Sprite):
         self.image=verde
         self.image=pygame.transform.scale(azul, (120,50))
         self.rect=self.image.get_rect()
-        self.rect.centerx=WIDTH/2
+        self.rect.centerx=random.randint(60,WIDTH-60)
         self.rect.bottom=-10
         self.width = WIDTH/5
         self.height = 50
+        self.speedx=30
         def update(self):
-            
             self.rect.x = random.randrange(WIDTH - self.rect.width)
             self.rect.y = random.randrange(-50, -200)
-
+            def update(self):
+             if self.rect.right>WIDTH:
+                self.speedx=-30
+            if self.rect.left<0:
+                self.speedx=30
 
 
 
 tela=pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Pulo desenho")
 clock=pygame.time.Clock()
-
 verde=pygame.image.load('imagens/green.png').convert()
 azul=pygame.image.load('imagens/blue.png').convert()
 vemelho=pygame.image.load('imagens/red.png').convert()
