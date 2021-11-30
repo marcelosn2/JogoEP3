@@ -6,6 +6,7 @@ import random
 from configuracoes import *
 
 img_dir = path.join(path.dirname(__file__), 'imagens')
+
 class Puli(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -21,24 +22,29 @@ class Puli(pygame.sprite.Sprite):
     def update(self):
         self.rect.x += self.speedx
         if self.rect.right>WIDTH:
-            self.rect.right=WIDTH
-        if self.rect.left<0:
             self.rect.left=0
+        if self.rect.left<0:
+            self.rect.right=WIDTH
+
 class PlatV(pygame.sprite.Sprite):
     def __init__(self):
+
+        x = random.randint(0,WIDTH)
+        y = random.randint(0,HEIGHT)
+
+
         pygame.sprite.Sprite.__init__(self)
         verde=pygame.image.load(path.join(img_dir, "green.png")).convert()
         self.image=verde
-        self.image=pygame.transform.scale(verde, (120,50))
+        self.image=pygame.transform.scale(verde, (120,30))
         self.image.set_colorkey(BLACK)
+        
         self.rect=self.image.get_rect()
-        self.rect.centerx=WIDTH/2
-        self.rect.bottom= HEIGHT -10 
-        self.width = 120
-        self.height = 50
-    def update(self):
-        self.rect.x = random.randrange(WIDTH - self.rect.width)
-        self.rect.y = random.randrange(-200, -50)
+        self.rect.centerx=x
+        self.rect.bottom= y
+        self.speedx=0
+
+
 
 class PlatB(pygame.sprite.Sprite):
     def __init__(self):
@@ -70,21 +76,21 @@ background = pygame.transform.scale(background, (WIDTH,HEIGHT))
 background_rect = background.get_rect()
 
 
-#def drawGrid():
-    #for x in range(80):
-        #pygame.draw.line(self.screen, (222,222,222), (x * 12, 0), (x * 12, 600))
-        #pygame.draw.line(self.screen, (222,222,222), (0, x * 12), (800, x * 12))
-#background = drawGrid()).convert()
-#background_rect = background.get_rect() 
+
 
 
 player = Puli()
-platV=PlatV()
 platB=PlatB()
 # Cria um grupo de todos os sprites e adiciona a nave.
 all_sprites = pygame.sprite.Group()
 all_sprites.add(player)
-all_sprites.add(platV)
+
+platV = pygame.sprite.Group()
+for i in range(8):
+    m = PlatV()
+    all_sprites.add(m)
+    platV.add(m)
+
 
 try:
     
