@@ -14,7 +14,7 @@ class Puli(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         dir=pygame.image.load('imagens/right.png').convert()
         self.image=dir
-        self.image=pygame.transform.scale(dir, (100,100))
+        self.image=pygame.transform.scale(dir, (60,60))
         self.image.set_colorkey(BLACK)
         self.rect=self.image.get_rect()
         self.rect.centerx=WIDTH/2
@@ -41,6 +41,22 @@ class PlatV(pygame.sprite.Sprite):
             
             self.rect.x = random.randrange(WIDTH - self.rect.width)
             self.rect.y = random.randrange(-50, -200)
+class PlatB(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        azul=pygame.image.load('imagens/blue.png').convert()
+        self.image=verde
+        self.image=pygame.transform.scale(azul, (120,50))
+        self.rect=self.image.get_rect()
+        self.rect.centerx=WIDTH/2
+        self.rect.bottom=-10
+        self.width = WIDTH/5
+        self.height = 50
+        def update(self):
+            
+            self.rect.x = random.randrange(WIDTH - self.rect.width)
+            self.rect.y = random.randrange(-50, -200)
+
 
 
 
