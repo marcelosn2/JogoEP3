@@ -1,78 +1,74 @@
+from os import path
 import pygame
 from pygame.locals import *
 import sys
 import random
 from configuracoes import *
-WIDTH=600
-HEIGHT=600
-WHITE=(255,255,255)
-BLACK = (0, 0, 0)
-FPS=50
 
+img_dir = path.join(path.dirname(__file__), 'imagens')
 class Puli(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        dir=pygame.image.load('imagens/right.png').convert()
+        dir= pygame.image.load(path.join(img_dir, "right.png")).convert()
         self.image=dir
-        self.image=pygame.transform.scale(dir, (60,60))
+        self.image=pygame.transform.scale(dir, (50,50))
         self.image.set_colorkey(BLACK)
-        self.rect=self.image.get_rect()
+        self.rect = self.image.get_rect()
         self.rect.centerx=WIDTH/2
-        self.rect.bottom=-10
+        self.rect.bottom= HEIGHT -10 
         self.speedx=0
-        self.radius=30
-        def update(self):
-            if self.rect.right>WIDTH:
-                self.rect.right=0
-            if self.rect.left<0:
-                self.rect.left=WIDTH
+        self.radius=50
+    def update(self):
+        self.rect.x += self.speedx
+        if self.rect.right>WIDTH:
+            self.rect.right=WIDTH
+        if self.rect.left<0:
+            self.rect.left=0
 class PlatV(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        verde=pygame.image.load('imagens/green.png').convert()
+        verde=pygame.image.load(path.join(img_dir, "green.png")).convert()
         self.image=verde
         self.image=pygame.transform.scale(verde, (120,50))
+        self.image.set_colorkey(BLACK)
         self.rect=self.image.get_rect()
-        self.rect.centerx=random.randint(60,WIDTH-60)
-        self.rect.bottom=-10
-        self.width = WIDTH/5
+        self.rect.centerx=WIDTH/2
+        self.rect.bottom= HEIGHT -10 
+        self.width = 120
         self.height = 50
-        def update(self):
-            
-            self.rect.x = random.randrange(WIDTH - self.rect.width)
-            self.rect.y = random.randrange(-50, -200)
+    def update(self):
+        self.rect.x = random.randrange(WIDTH - self.rect.width)
+        self.rect.y = random.randrange(-200, -50)
+
 class PlatB(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         azul=pygame.image.load('imagens/blue.png').convert()
-        self.image=verde
+    
         self.image=pygame.transform.scale(azul, (120,50))
         self.rect=self.image.get_rect()
         self.rect.centerx=random.randint(60,WIDTH-60)
-        self.rect.bottom=-10
+        self.rect.y= HEIGHT -50
         self.width = WIDTH/5
         self.height = 50
         self.speedx=30
-        def update(self):
-            self.rect.x = random.randrange(WIDTH - self.rect.width)
-            self.rect.y = random.randrange(-50, -200)
-            def update(self):
-             if self.rect.right>WIDTH:
-                self.speedx=-30
-            if self.rect.left<0:
-                self.speedx=30
+    def update(self):
+        self.rect.x = random.randrange(WIDTH - self.rect.width)
+        self.rect.y = random.randrange(-200, -50)
+        if self.rect.right>WIDTH:
+            self.speedx=-30
+        if self.rect.left<0:
+            self.speedx=30
 
 
-
+pygame.init()
 tela=pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Pulo desenho")
 clock=pygame.time.Clock()
-verde=pygame.image.load('imagens/green.png').convert()
-azul=pygame.image.load('imagens/blue.png').convert()
-vemelho=pygame.image.load('imagens/red.png').convert()
-dir=pygame.image.load('imagens/right.png').convert()
-esq=pygame.image.load('imagens/left.png').convert()      
-pygame.init()
+background = pygame.image.load(path.join(img_dir, 'background.jpg')).convert()
+background = pygame.transform.scale(background, (WIDTH,HEIGHT))
+background_rect = background.get_rect()
+
 
 #def drawGrid():
     #for x in range(80):
@@ -82,37 +78,61 @@ pygame.init()
 #background_rect = background.get_rect() 
 
 
-player=Puli()
-all_sprites=pygame.sprite.Group()
+player = Puli()
+platV=PlatV()
+platB=PlatB()
+# Cria um grupo de todos os sprites e adiciona a nave.
+all_sprites = pygame.sprite.Group()
 all_sprites.add(player)
-platv = pygame.sprite.Group()
-for i in range(8):
-    m = PlatV()
-    all_sprites.add(m)
-    platv.add(m)
+all_sprites.add(platV)
+
 try:
-    game=True
-
-    while game:
+    
+    running = True
+    while running:
+        
+        # Ajusta a velocidade do jogo.
         clock.tick(FPS)
+        
+        # Processa os eventos (mouse, teclado, botão, etc).
         for event in pygame.event.get():
-            if event.type==pygame.QUIT:
-                game= False
+            
+            # Verifica se foi fechado.
+            if event.type == pygame.QUIT:
+                running = False
+            
+            # Verifica se apertou alguma tecla.
+            if event.type == pygame.KEYDOWN:
+                # Dependendo da tecla, altera a velocidade.
+                if event.key == pygame.K_LEFT:
+                    player.speedx = -8
+                if event.key == pygame.K_RIGHT:
+                    player.speedx = 8
+                # Se for um espaço atira!
 
-            if event.type==pygame.KEYDOWN:
-
-                if event.key==pygame.K_LEFT:
-                    player.speedx=-8
-                if event.key==pygame.K_RIGHT:
-                    player.speefx=8
-            if event.type==pygame.KEYUP:
-                if event.key==pygame.K_LEFT:
-                    player.speedx=0
-                if event.key==pygame.K_RIGHT:
-                    player.speefx=0
+                    
+                    
+            if event.type == pygame.KEYUP:
+                # Dependendo da tecla, altera a velocidade.
+                if event.key == pygame.K_LEFT:
+                    player.speedx = 0
+                if event.key == pygame.K_RIGHT:
+                    player.speedx = 0
+                    
+        # Depois de processar os eventos.
+        # Atualiza a acao de cada sprite.
         all_sprites.update()
+
+      
+    
+        # A cada loop, redesenha o fundo e os sprites
         tela.fill(WHITE)
+        tela.blit(background, background_rect)
         all_sprites.draw(tela)
-        pygame.display.flip
+        
+        # Depois de desenhar tudo, inverte o display.
+        pygame.display.flip()
+        
 finally:
+    
     pygame.quit()
