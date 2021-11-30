@@ -6,6 +6,7 @@ from configuracoes import *
 WIDTH=600
 HEIGHT=600
 WHITE=(255,255,255)
+BLACK = (0, 0, 0)
 FPS=50
 
 class Puli(pygame.sprite.Sprite):
@@ -14,7 +15,7 @@ class Puli(pygame.sprite.Sprite):
         dir=pygame.image.load('imagens/right.png').convert()
         self.image=dir
         self.image=pygame.transform.scale(dir, (100,100))
-
+        self.image.set_colorkey(BLACK)
         self.rect=self.image.get_rect()
         self.rect.centerx=WIDTH/2
         self.rect.bottom=-10
@@ -25,6 +26,24 @@ class Puli(pygame.sprite.Sprite):
                 self.rect.right=0
             if self.rect.left<0:
                 self.rect.left=WIDTH
+class PlatV(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        verde=pygame.image.load('imagens/green.png').convert()
+        self.image=verde
+        self.image=pygame.transform.scale(verde, (120,50))
+        self.rect=self.image.get_rect()
+        self.rect.centerx=WIDTH/2
+        self.rect.bottom=-10
+        self.width = WIDTH/5
+        self.height = 50
+        def update(self):
+            
+            self.rect.x = random.randrange(WIDTH - self.rect.width)
+            self.rect.y = random.randrange(-50, -200)
+
+
+
 tela=pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Pulo desenho")
 clock=pygame.time.Clock()
@@ -33,20 +52,25 @@ verde=pygame.image.load('imagens/green.png').convert()
 azul=pygame.image.load('imagens/blue.png').convert()
 vemelho=pygame.image.load('imagens/red.png').convert()
 dir=pygame.image.load('imagens/right.png').convert()
-esq=pygame.image.load('imagens/left.png').convert()
-        
+esq=pygame.image.load('imagens/left.png').convert()      
 pygame.init()
 
-#def drawGrid(self):
+#def drawGrid():
     #for x in range(80):
         #pygame.draw.line(self.screen, (222,222,222), (x * 12, 0), (x * 12, 600))
         #pygame.draw.line(self.screen, (222,222,222), (0, x * 12), (800, x * 12))
-
+#background = drawGrid()).convert()
+#background_rect = background.get_rect() 
 
 
 player=Puli()
 all_sprites=pygame.sprite.Group()
 all_sprites.add(player)
+platv = pygame.sprite.Group()
+for i in range(8):
+    m = PlatV()
+    all_sprites.add(m)
+    platv.add(m)
 try:
     game=True
 
