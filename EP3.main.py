@@ -6,11 +6,11 @@ import sys
 import random
 from configuracoes import *
 
-img_dir = path.join(path.dirname(_file_), 'imagens')
+img_dir = path.join(path.dirname(__file__), 'imagens')
 
 class Puli(pygame.sprite.Sprite):
-    def _init_(self):
-        pygame.sprite.Sprite._init_(self)
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
         self.dir= pygame.image.load(path.join(img_dir, "right.png")).convert()
         self.image=self.dir
         self.image=pygame.transform.scale(self.dir, (50,50))
@@ -51,12 +51,12 @@ class Puli(pygame.sprite.Sprite):
 
 
 class PlatV(pygame.sprite.Sprite):
-    def _init_(self):
+    def __init__(self):
 
         x = random.randint(0,WIDTH)
         y = random.randint(0,HEIGHT)
 
-        pygame.sprite.Sprite._init_(self)
+        pygame.sprite.Sprite.__init__(self)
         verde=pygame.image.load(path.join(img_dir, "green.png")).convert()
         self.image=verde
         self.image=pygame.transform.scale(verde, (120,30))
@@ -69,9 +69,9 @@ class PlatV(pygame.sprite.Sprite):
         self.speedx=0
 
 class PlatVInit(pygame.sprite.Sprite):
-    def _init_(self):
+    def __init__(self):
 
-        pygame.sprite.Sprite._init_(self)
+        pygame.sprite.Sprite.__init__(self)
         verde=pygame.image.load(path.join(img_dir, "green.png")).convert()
         self.image=verde
         self.image=pygame.transform.scale(verde, (120,30))
@@ -89,11 +89,11 @@ class PlatVInit(pygame.sprite.Sprite):
 
 
 class PlatB(pygame.sprite.Sprite):
-    def _init_(self):
+    def __init__(self):
         x = random.randint(0,WIDTH)
         y = random.randint(0,HEIGHT)
         
-        pygame.sprite.Sprite._init_(self)
+        pygame.sprite.Sprite.__init__(self)
         azul=pygame.image.load(path.join(img_dir, "blue.png")).convert()
     
         self.image=pygame.transform.scale(azul, (120,30))
