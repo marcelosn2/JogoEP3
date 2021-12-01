@@ -1,4 +1,5 @@
-from os import path
+from os import path, times
+import time
 import pygame
 from pygame.locals import *
 import sys
@@ -18,9 +19,17 @@ class Puli(pygame.sprite.Sprite):
         self.rect.centerx=WIDTH/2
         self.rect.bottom= HEIGHT -10 
         self.speedx=0
+        self.speedy = 0
+        self.jump = 1
         self.radius=50
     def update(self):
         self.rect.x += self.speedx
+        if self.jump == 0:
+            
+            self.rect.y += self.speedy
+        else :
+            self.rect.y -= (self.speedy)+1
+
         if self.rect.right>WIDTH:
             self.rect.left=0
         if self.rect.left<0:
@@ -32,13 +41,13 @@ class PlatV(pygame.sprite.Sprite):
         x = random.randint(0,WIDTH)
         y = random.randint(0,HEIGHT)
 
-
         pygame.sprite.Sprite.__init__(self)
         verde=pygame.image.load(path.join(img_dir, "green.png")).convert()
         self.image=verde
         self.image=pygame.transform.scale(verde, (120,30))
         self.image.set_colorkey(BLACK)
-        
+        self.width=120
+        self.height=30
         self.rect=self.image.get_rect()
         self.rect.centerx=x
         self.rect.bottom= y
@@ -48,23 +57,25 @@ class PlatV(pygame.sprite.Sprite):
 
 class PlatB(pygame.sprite.Sprite):
     def __init__(self):
+        x = random.randint(0,WIDTH)
+        y = random.randint(0,HEIGHT)
+        
         pygame.sprite.Sprite.__init__(self)
         azul=pygame.image.load('imagens/blue.png').convert()
     
-        self.image=pygame.transform.scale(azul, (120,50))
+        self.image=pygame.transform.scale(azul, (120,30))
+        self.image.set_colorkey(BLACK)
         self.rect=self.image.get_rect()
-        self.rect.centerx=random.randint(60,WIDTH-60)
-        self.rect.y= HEIGHT -50
-        self.width = WIDTH/5
-        self.height = 50
+        self.rect.centerx=x
+        self.rect.y= y
+        self.width = 120
+        self.height = 30
         self.speedx=30
-    def update(self):
-        self.rect.x = random.randrange(WIDTH - self.rect.width)
-        self.rect.y = random.randrange(-200, -50)
-        if self.rect.right>WIDTH:
-            self.speedx=-30
-        if self.rect.left<0:
-            self.speedx=30
+    #def update(self):
+     #   if self.rect.right==WIDTH:
+      #      self.speedx=-2
+       # if self.rect.left==0:
+        #    self.speedx=2
 
 
 pygame.init()
@@ -86,12 +97,16 @@ all_sprites = pygame.sprite.Group()
 all_sprites.add(player)
 
 platV = pygame.sprite.Group()
+platB = pygame.sprite.Group()
 for i in range(8):
     m = PlatV()
     all_sprites.add(m)
     platV.add(m)
 
-
+for i in range(4):
+    b=PlatB()
+    all_sprites.add(b)
+    platB.add(b)
 try:
     
     running = True
@@ -114,7 +129,7 @@ try:
                     player.speedx = -8
                 if event.key == pygame.K_RIGHT:
                     player.speedx = 8
-                # Se for um espaço atira!
+                
 
                     
                     
@@ -126,9 +141,17 @@ try:
                     player.speedx = 0
                     
         # Depois de processar os eventos.
-        # Atualiza a acao de cada sprite.
+        # Atualiza a acao de     cada sprite.
         all_sprites.update()
 
+        hits = pygame.sprite.spritecollide(player, platV, False, pygame.sprite.collide_circle)
+        if hits:
+            player.jump = 1
+            
+        else :
+            player.jump = 0
+            
+           
       
     
         # A cada loop, redesenha o fundo e os sprites
