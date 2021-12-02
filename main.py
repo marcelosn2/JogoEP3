@@ -14,8 +14,10 @@ class Puli(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.dir= pygame.image.load(path.join(img_dir, "right.png")).convert()
+        self.esq= pygame.image.load(path.join(img_dir, "left.png")).convert()
         self.image=self.dir
         self.image=pygame.transform.scale(self.dir, (50,50))
+        self.image=pygame.transform.scale(self.esq, (50,50))
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         self.rect.centerx=WIDTH/2
@@ -49,7 +51,8 @@ class Puli(pygame.sprite.Sprite):
 
         if self.screenupdate:
             self.rect.centerx=self.rect.centerx
-            self.rect.bottom= HEIGHT - 40 
+            self.rect.bottom= HEIGHT - 40
+             
             self.screenupdate = False
             self.isJump = True
 
@@ -185,9 +188,14 @@ try:
                 # Dependendo da tecla, altera a velocidade.
                 if event.key == pygame.K_LEFT:
                     player.speedx = -8
+                    player.image=player.esq
+                    player.image=pygame.transform.scale(player.esq, (50,50))
+                    player.image.set_colorkey(BLACK)
                 if event.key == pygame.K_RIGHT:
                     player.speedx = 8
-                
+                    player.image=player.dir
+                    player.image=pygame.transform.scale(player.dir, (50,50))
+                    player.image.set_colorkey(BLACK)    
 
                     
                     
