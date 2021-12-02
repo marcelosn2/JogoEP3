@@ -45,9 +45,10 @@ class Puli(pygame.sprite.Sprite):
             self.rect.left=0
         if self.rect.left<0:
             self.rect.right=WIDTH
-        
+            
+
         if self.screenupdate:
-            self.rect.centerx=WIDTH/2
+            self.rect.centerx=self.rect.centerx
             self.rect.bottom= HEIGHT - 40 
             self.screenupdate = False
             self.isJump = True
@@ -196,7 +197,8 @@ try:
                     player.speedx = 0
                 if event.key == pygame.K_RIGHT:
                     player.speedx = 0
-                    
+            if player.rect.bottom>HEIGHT-17:
+                running= False       
         # Depois de processar os eventos.
         # Atualiza a acao de     cada sprite.
         all_sprites.update()
