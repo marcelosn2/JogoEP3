@@ -28,6 +28,9 @@ class Puli(pygame.sprite.Sprite):
         self.isJump = False
         self.jumpCount = 0
         self.radius=10
+        self.score=0
+        pygame.font.init()
+        self.font = pygame.font.SysFont("Arial", 25)
     #Update da classe do personagem principal
     def update(self):
         
@@ -52,7 +55,7 @@ class Puli(pygame.sprite.Sprite):
         if self.screenupdate:
             self.rect.centerx=self.rect.centerx
             self.rect.bottom= HEIGHT - 40
-             
+            self.score+=100
             self.screenupdate = False
             self.isJump = True
 
@@ -113,13 +116,21 @@ class PlatB(pygame.sprite.Sprite):
         self.rect=self.image.get_rect()
         self.rect.centerx=x
         self.rect.y= y
+        self.count=0
         self.width = 120
         self.height = 30
-        self.speedx=30
+        self.speedx=random.randint(1,5)
 
     # Update da classe da plataforma azul
     def update(self):
-        pass
+        if 0 <= self.count <= 60 :
+            self.rect.x += self.speedx 
+            self.count += 1
+        elif 60 < self.count <= 120:
+            self.rect.x -= self.speedx
+            self.count += 1
+        else: 
+            self.count = 0
 # Inicializacao do programa
 pygame.init()
 
@@ -145,8 +156,7 @@ platvinit = pygame.sprite.Group()
 platV = pygame.sprite.Group()
 platB = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
-
-
+#player.screen.blit(player.font.render(str(player.score), -1, (0, 0, 0)), (25, 25))
 
 # Colocando os grupos da variavel all_sprites
 all_sprites.add(player)
@@ -221,7 +231,15 @@ try:
 
         else:
             player.dir = pygame.image.load(path.join(img_dir, "right_1.png")).convert()
-      
+        hitsplatb = pygame.sprite.spritecollide(player, platB, False, pygame.sprite.collide_circle)
+        if hitsplatb:
+            player.isJump = True
+            player.jumpCount = 30
+            player.speedy = -5
+            player.dir = pygame.image.load(path.join(img_dir, "right.png")).convert()
+
+        else:
+            player.dir = pygame.image.load(path.join(img_dir, "right_1.png")).convert()
         # O boneco pula ao colidir com a plataforma verde inicial
         hitsplatvinit = pygame.sprite.spritecollide(player, platvinit, False)
         if hitsplatvinit:
@@ -240,10 +258,17 @@ try:
             player.screenupdate = True
             for i in platV:
                 i.kill()
+            for i in platB:
+                i.kill()
+
             all_sprites.clear(tela, background)
             all_sprites.draw(tela)
-            for i in range(8):
+            for i in range(6):
                 m = PlatV()
+                all_sprites.add(m)
+                platV.add(m)
+            for i in range(4):
+                m = PlatB()
                 all_sprites.add(m)
                 platV.add(m)
 
