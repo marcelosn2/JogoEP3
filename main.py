@@ -5,132 +5,9 @@ from pygame.locals import *
 import sys
 import random
 from configuracoes import *
-
+from classes import *
 # Importando as imagens
 img_dir = path.join(path.dirname(__file__), 'imagens')
-
-# Classe do personagem principal
-class Puli(pygame.sprite.Sprite):
-    def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
-        self.dir= pygame.image.load(path.join(img_dir, "right.png")).convert()
-        self.esq= pygame.image.load(path.join(img_dir, "left.png")).convert()
-        self.image=self.dir
-        self.image=pygame.transform.scale(self.dir, (50,50))
-        self.image=pygame.transform.scale(self.esq, (50,50))
-        self.image.set_colorkey(BLACK)
-        self.rect = self.image.get_rect()
-        self.rect.centerx=WIDTH/2
-        self.rect.bottom= HEIGHT - 40 
-        self.screenupdate = False
-        self.speedx=0
-        self.speedy = -5
-        self.isJump = False
-        self.jumpCount = 0
-        self.radius=10
-        self.score=0
-        pygame.font.init()
-        self.font = pygame.font.SysFont("Arial", 25)
-    #Update da classe do personagem principal
-    def update(self):
-        
-        self.rect.x += self.speedx
-        
-        if self.isJump:
-            if self.jumpCount > 0:
-                self.rect.y += self.speedy
-                self.jumpCount -= 1
-            else:
-                self.rect.y -= self.speedy 
-        else:
-            self.rect.y -= self.speedy 
-
-
-        if self.rect.right>WIDTH:
-            self.rect.left=0
-        if self.rect.left<0:
-            self.rect.right=WIDTH
-            
-
-        if self.screenupdate:
-            self.rect.centerx=self.rect.centerx
-            self.rect.bottom= HEIGHT - 40
-            self.score+=100
-            self.screenupdate = False
-            self.isJump = True
-
-# Classe da plataforma verde
-class PlatV(pygame.sprite.Sprite):
-    def __init__(self):
-
-        x = random.randint(0,WIDTH)
-        y = random.randint(0,HEIGHT)
-
-        pygame.sprite.Sprite.__init__(self)
-        verde=pygame.image.load(path.join(img_dir, "green.png")).convert()
-        self.image=verde
-        self.image=pygame.transform.scale(verde, (120,30))
-        self.image.set_colorkey(BLACK)
-        self.width=120
-        self.height=30
-        self.rect=self.image.get_rect()
-        self.rect.centerx= x
-        self.rect.bottom= y
-        self.speedx=0
-
-    #Update da classe da plataforma verde
-    def update(self):
-        pass
-
-# Classe da plataforma verde inicial
-class PlatVInit(pygame.sprite.Sprite):
-    def __init__(self):
-
-        pygame.sprite.Sprite.__init__(self)
-        verde=pygame.image.load(path.join(img_dir, "green.png")).convert()
-        self.image=verde
-        self.image=pygame.transform.scale(verde, (120,30))
-        self.image.set_colorkey(BLACK)
-        self.rect=self.image.get_rect()
-        self.rect.centerx=WIDTH/2
-        self.rect.bottom= HEIGHT -10 
-        self.speedx=0
-        self.width=120
-        self.height=30
-    # Update da classe da plataforma verde inicial
-    def update(self):
-        self.rect.bottom = self.rect.bottom 
-        self.rect.centerx=self.rect.centerx
-
-# Classe da plataforma azul
-class PlatB(pygame.sprite.Sprite):
-    def __init__(self):
-        x = random.randint(0,WIDTH)
-        y = random.randint(0,HEIGHT)
-        
-        pygame.sprite.Sprite.__init__(self)
-        azul=pygame.image.load(path.join(img_dir, "blue.png")).convert()
-    
-        self.image=pygame.transform.scale(azul, (120,30))
-        self.image.set_colorkey(BLACK)
-        self.rect=self.image.get_rect()
-        self.rect.centerx=x
-        self.rect.y= y
-        self.count=0
-        self.width = 120
-        self.height = 30
-        self.speedx=random.randint(1,5)
-
-    # Update da classe da plataforma azul
-    def update(self):
-        if 0 <= self.count <= 60 :
-            self.rect.x += self.speedx 
-            self.count += 1
-        elif 60 < self.count <= 120:
-            self.rect.x -= self.speedx
-            self.count += 1
-        else: 
-            self.count = 0
 # Inicializacao do programa
 pygame.init()
 
@@ -146,26 +23,24 @@ clock=pygame.time.Clock()
 # Inicializacao da imagem de background
 background = pygame.image.load(path.join(img_dir, 'background.jpg')).convert()
 background = pygame.transform.scale(background, (WIDTH,HEIGHT))
-
 background_rect = background.get_rect()
-
 
 # Inicializacao das classes
 player = Puli()
-platvinit = pygame.sprite.Group()
+#score = Score()
+platVinit = pygame.sprite.Group()
 platV = pygame.sprite.Group()
 platB = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
-#player.screen.blit(player.font.render(str(player.score), -1, (0, 0, 0)), (25, 25))
 
 # Colocando os grupos da variavel all_sprites
 all_sprites.add(player)
 all_sprites.add(PlatVInit())
-platvinit.add(PlatVInit())
-
+platVinit.add(PlatVInit())
+#all_sprites.add(score())
 
 # Adicionando varias classes a um grupo e colocando esse grupo no all_sprites
-for i in range(8):
+for i in range(6):
     m = PlatV()
     all_sprites.add(m)
     platV.add(m)
@@ -205,20 +80,19 @@ try:
                     player.speedx = 8
                     player.image=player.dir
                     player.image=pygame.transform.scale(player.dir, (50,50))
-                    player.image.set_colorkey(BLACK)    
+                    player.image.set_colorkey(BLACK)
 
                     
-                    
+            # Verifica se soltou alguma tecla.        
             if event.type == pygame.KEYUP:
                 # Dependendo da tecla, altera a velocidade.
                 if event.key == pygame.K_LEFT:
                     player.speedx = 0
                 if event.key == pygame.K_RIGHT:
                     player.speedx = 0
-            if player.rect.bottom>HEIGHT-17:
-                running= False       
+                    
         # Depois de processar os eventos.
-        # Atualiza a acao de     cada sprite.
+        # Atualiza a acao de cada sprite.
         all_sprites.update()
 
         # O boneco principal pula ao colidir com uma plataforma verde
@@ -231,6 +105,8 @@ try:
 
         else:
             player.dir = pygame.image.load(path.join(img_dir, "right_1.png")).convert()
+
+        # O boneco principal pula ao colidir com uma plataforma azul
         hitsplatb = pygame.sprite.spritecollide(player, platB, False, pygame.sprite.collide_circle)
         if hitsplatb:
             player.isJump = True
@@ -240,47 +116,42 @@ try:
 
         else:
             player.dir = pygame.image.load(path.join(img_dir, "right_1.png")).convert()
+
+
+
         # O boneco pula ao colidir com a plataforma verde inicial
-        hitsplatvinit = pygame.sprite.spritecollide(player, platvinit, False)
+        hitsplatvinit = pygame.sprite.spritecollide(player, platVinit, False)
         if hitsplatvinit:
             player.isJump = True
             player.jumpCount = 30
             player.speedy = -5
             player.dir = pygame.image.load(path.join(img_dir, "right.png")).convert()
-            
-
         else:
             player.dir = pygame.image.load(path.join(img_dir, "right_1.png")).convert()   
 
-        # Ao atingir o topo da tela ha o screenupdate onde o boneco volta a sua posucao no comeco da tela e as plataformas sao 
+        # Ao atingir o topo da tela ha o screenupdate onde o boneco passa para a proxima fase e as plataformas sao 
         # renderizadas novamente de forma aleatoria na tela
         if player.rect.y == 5:
             player.screenupdate = True
+            #score.numero +=100
             for i in platV:
                 i.kill()
-            for i in platB:
-                i.kill()
-
             all_sprites.clear(tela, background)
             all_sprites.draw(tela)
             for i in range(6):
                 m = PlatV()
                 all_sprites.add(m)
                 platV.add(m)
-            for i in range(4):
-                m = PlatB()
-                all_sprites.add(m)
-                platV.add(m)
-
-    
+        if player.rect.bottom>HEIGHT-20:
+            running=False
         # A cada loop, redesenha o fundo e os sprites
         tela.fill(WHITE)
         tela.blit(background, background_rect)
         all_sprites.draw(tela)
-        
+        #print(score.numero)
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
         
 finally:
-    
+   #finaliza o jogo 
     pygame.quit()
