@@ -49,7 +49,6 @@ for i in range(4):
     b=PlatB()
     all_sprites.add(b)
     platB.add(b)
-tela.blit(score.font.render(str(score.numero), -1, (0, 0, 0)), (25, 25))
 # Try - Catch para nao travar o jogo
 try:
     
@@ -142,6 +141,14 @@ try:
                 m = PlatV()
                 all_sprites.add(m)
                 platV.add(m)
+            for i in platB:
+                i.kill()
+            for i in range(4):
+                b=PlatB()
+                all_sprites.add(b)
+                platB.add(b)
+            all_sprites.clear(tela, background)
+            all_sprites.draw(tela)
         if player.rect.bottom>HEIGHT-10:
             running=False
         # A cada loop, redesenha o fundo e os sprites

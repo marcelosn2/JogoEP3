@@ -126,6 +126,10 @@ class PlatB(pygame.sprite.Sprite):
             self.count += 1
         else: 
             self.count = 0
+        if self.rect.right>WIDTH:
+            self.rect.left=0
+        if self.rect.left<0:
+            self.rect.right=WIDTH
 #classe de pontuacao
 class Score(pygame.sprite.Sprite):
     def __init__(self):
@@ -135,6 +139,6 @@ class Score(pygame.sprite.Sprite):
         self.rect = self.text.get_rect()
         self.rect.x=10
         self.rect.y=10 
-
+#update da pontuacao
     def update(self):
         self.numero = self.numero
