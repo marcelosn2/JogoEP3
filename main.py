@@ -15,7 +15,7 @@ pygame.init()
 tela=pygame.display.set_mode((WIDTH, HEIGHT))
 
 # Nome do jogo
-pygame.display.set_caption("Pulo desenho")
+pygame.display.set_caption("Puli Pulante")
 
 # Inicializacao do relogio
 clock=pygame.time.Clock()
@@ -159,7 +159,7 @@ try:
        # adiciona pontuacao na tela
         text_surface = score.font.render("{}".format(score.numero), True, (0, 0, 0))
         text_rect = text_surface.get_rect()
-        text_rect.midtop = (100,  10)
+        text_rect.midtop = (103,  10)
         tela.blit(text_surface, text_rect)
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
