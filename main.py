@@ -27,7 +27,7 @@ background_rect = background.get_rect()
 
 # Inicializacao das classes
 player = Puli()
-#score = Score()
+score = Score()
 platVinit = pygame.sprite.Group()
 platV = pygame.sprite.Group()
 platB = pygame.sprite.Group()
@@ -49,7 +49,7 @@ for i in range(4):
     b=PlatB()
     all_sprites.add(b)
     platB.add(b)
-
+tela.blit(score.font.render(str(score.numero), -1, (0, 0, 0)), (25, 25))
 # Try - Catch para nao travar o jogo
 try:
     
@@ -133,7 +133,7 @@ try:
         # renderizadas novamente de forma aleatoria na tela
         if player.rect.y == 5:
             player.screenupdate = True
-            #score.numero +=100
+            score.numero +=100
             for i in platV:
                 i.kill()
             all_sprites.clear(tela, background)
@@ -142,13 +142,16 @@ try:
                 m = PlatV()
                 all_sprites.add(m)
                 platV.add(m)
-        if player.rect.bottom>HEIGHT-20:
+        if player.rect.bottom>HEIGHT-10:
             running=False
         # A cada loop, redesenha o fundo e os sprites
         tela.fill(WHITE)
         tela.blit(background, background_rect)
         all_sprites.draw(tela)
-        #print(score.numero)
+        text_surface = score.font.render("{}".format(score.numero), True, (0, 0, 0))
+        text_rect = text_surface.get_rect()
+        text_rect.midtop = (WIDTH / 2,  10)
+        tela.blit(text_surface, text_rect)
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
         

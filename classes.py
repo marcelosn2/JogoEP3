@@ -5,6 +5,8 @@ from pygame.locals import *
 import sys
 import random
 from configuracoes import *
+#Inicia Escritura
+pygame.font.init()
 # Importando as imagens
 img_dir = path.join(path.dirname(__file__), 'imagens')
 # Classe do personagem principal
@@ -128,7 +130,7 @@ class PlatB(pygame.sprite.Sprite):
 class Score(pygame.sprite.Sprite):
     def __init__(self):
         self.numero = 0
-        self.font= pygame.font.Font(None, 25)
+        self.font = pygame.font.SysFont("Arial", 25)
         self.text= self.font.render(str(self.numero), True, BLACK, WHITE)
         self.rect = self.text.get_rect()
         self.rect.x=10
