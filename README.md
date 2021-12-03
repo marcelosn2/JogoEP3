@@ -8,3 +8,4 @@ Referencias:
 https://github.com/f-prime/DoodleJump
 
 Video do jogo:
+https://youtube.com/shorts/bgIlVGTT3NU?feature=share
