@@ -155,9 +155,11 @@ try:
         tela.fill(WHITE)
         tela.blit(background, background_rect)
         all_sprites.draw(tela)
+       
+       # adiciona pontuacao na tela
         text_surface = score.font.render("{}".format(score.numero), True, (0, 0, 0))
         text_rect = text_surface.get_rect()
-        text_rect.midtop = (WIDTH / 2,  10)
+        text_rect.midtop = (100,  10)
         tela.blit(text_surface, text_rect)
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
